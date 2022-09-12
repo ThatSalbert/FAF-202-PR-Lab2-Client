@@ -1,4 +1,4 @@
-package api
+package item
 
 import (
 	"math/rand"
@@ -37,11 +37,10 @@ func Genlist(nitems int) []int {
 }
 
 func Get_max_wait(itemarray []int) int {
-	var max_wait int
-	var max int = -1000
+	var max_wait int = -1000
 	for i := 0; i < len(itemarray); i++ {
-		if menu[i-1].preparation_time > max {
-			max = menu[i-1].preparation_time
+		if menu[itemarray[i]-1].preparation_time > max_wait {
+			max_wait = menu[itemarray[i]-1].preparation_time
 		}
 	}
 	return max_wait
