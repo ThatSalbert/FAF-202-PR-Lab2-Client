@@ -4,29 +4,29 @@ import (
 	"math/rand"
 )
 
-type food struct {
-	id                int    `json:"id"`
-	name              string `json:"name"`
-	preparation_time  int    `json:"preparation-time"`
-	complexity        int    `json:"complexity"`
-	cooking_apparatus string `json:"cooking-aparatus"`
+type Food struct {
+	Id                int    `json:"id"`
+	Name              string `json:"name"`
+	Preparation_time  int    `json:"preparation_time"`
+	Complexity        int    `json:"complexity"`
+	Cooking_apparatus string `json:"cooking_apparatus"`
 }
 
-var pizza = food{id: 1, name: "pizza", preparation_time: 20, complexity: 2, cooking_apparatus: "oven"}
-var salad = food{id: 2, name: "salad", preparation_time: 10, complexity: 1, cooking_apparatus: ""}
-var zeama = food{id: 3, name: "zeama", preparation_time: 7, complexity: 1, cooking_apparatus: "stove"}
-var scallop = food{id: 4, name: "Scallop Sashimi with Meyer Lemon Confit", preparation_time: 32, complexity: 3, cooking_apparatus: ""}
-var island_duck = food{id: 5, name: "Island Duck with Mulberry Mustard", preparation_time: 35, complexity: 3, cooking_apparatus: "oven"}
-var waffles = food{id: 6, name: "Waffles", preparation_time: 10, complexity: 1, cooking_apparatus: "stove"}
-var aubergine = food{id: 7, name: "Aubergine", preparation_time: 20, complexity: 2, cooking_apparatus: "oven"}
-var lasagna = food{id: 8, name: "Lasagna", preparation_time: 30, complexity: 2, cooking_apparatus: "oven"}
-var burger = food{id: 9, name: "Burger", preparation_time: 15, complexity: 1, cooking_apparatus: "stove"}
-var gyros = food{id: 10, name: "Gyros", preparation_time: 15, complexity: 1, cooking_apparatus: ""}
-var kebab = food{id: 11, name: "Kebab", preparation_time: 15, complexity: 1, cooking_apparatus: ""}
-var unagi = food{id: 12, name: "Unagi Maki", preparation_time: 20, complexity: 2, cooking_apparatus: ""}
-var tobacco = food{id: 13, name: "Tobacco Chicken", preparation_time: 30, complexity: 2, cooking_apparatus: "oven"}
+var pizza = Food{Id: 1, Name: "pizza", Preparation_time: 20, Complexity: 2, Cooking_apparatus: "oven"}
+var salad = Food{Id: 2, Name: "salad", Preparation_time: 10, Complexity: 1, Cooking_apparatus: ""}
+var zeama = Food{Id: 3, Name: "zeama", Preparation_time: 7, Complexity: 1, Cooking_apparatus: "stove"}
+var scallop = Food{Id: 4, Name: "Scallop Sashimi with Meyer Lemon Confit", Preparation_time: 32, Complexity: 3, Cooking_apparatus: ""}
+var island_duck = Food{Id: 5, Name: "Island Duck with Mulberry Mustard", Preparation_time: 35, Complexity: 3, Cooking_apparatus: "oven"}
+var waffles = Food{Id: 6, Name: "Waffles", Preparation_time: 10, Complexity: 1, Cooking_apparatus: "stove"}
+var aubergine = Food{Id: 7, Name: "Aubergine", Preparation_time: 20, Complexity: 2, Cooking_apparatus: "oven"}
+var lasagna = Food{Id: 8, Name: "Lasagna", Preparation_time: 30, Complexity: 2, Cooking_apparatus: "oven"}
+var burger = Food{Id: 9, Name: "Burger", Preparation_time: 15, Complexity: 1, Cooking_apparatus: "stove"}
+var gyros = Food{Id: 10, Name: "Gyros", Preparation_time: 15, Complexity: 1, Cooking_apparatus: ""}
+var kebab = Food{Id: 11, Name: "Kebab", Preparation_time: 15, Complexity: 1, Cooking_apparatus: ""}
+var unagi = Food{Id: 12, Name: "Unagi Maki", Preparation_time: 20, Complexity: 2, Cooking_apparatus: ""}
+var tobacco = Food{Id: 13, Name: "Tobacco Chicken", Preparation_time: 30, Complexity: 2, Cooking_apparatus: "oven"}
 
-var menu = []food{pizza, salad, zeama, scallop, island_duck, waffles, aubergine, lasagna, burger, gyros, kebab, unagi, tobacco}
+var menu = []Food{pizza, salad, zeama, scallop, island_duck, waffles, aubergine, lasagna, burger, gyros, kebab, unagi, tobacco}
 
 func Genlist(nitems int) []int {
 	var itemarray []int = make([]int, nitems)
@@ -39,8 +39,8 @@ func Genlist(nitems int) []int {
 func Get_max_wait(itemarray []int) int {
 	var max_wait int = -1000
 	for i := 0; i < len(itemarray); i++ {
-		if menu[itemarray[i]-1].preparation_time > max_wait {
-			max_wait = menu[itemarray[i]-1].preparation_time
+		if menu[itemarray[i]-1].Preparation_time > max_wait {
+			max_wait = menu[itemarray[i]-1].Preparation_time
 		}
 	}
 	return max_wait

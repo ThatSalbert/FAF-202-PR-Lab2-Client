@@ -1,19 +1,19 @@
 package item
 
-type waiter struct {
-	id           int
-	state        int8
-	picked_order *order
+type Waiter struct {
+	Id           int    `json:"id"`
+	State        int8   `json:"state"`
+	Picked_order *Order `json:"picked_order"`
 }
 
-var waiters []waiter
+var Waiters []Waiter
 
 func Genwaiter(n int) {
 	for i := 0; i < n; i++ {
-		var newwaiter waiter
-		newwaiter.id = i + 1
-		newwaiter.state = 0
-		newwaiter.picked_order = nil
-		waiters = append(waiters, newwaiter)
+		var newwaiter Waiter
+		newwaiter.Id = i + 1
+		newwaiter.State = 0
+		newwaiter.Picked_order = nil
+		Waiters = append(Waiters, newwaiter)
 	}
 }
