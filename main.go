@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 
 	"dining_hall/item"
 
@@ -16,34 +17,43 @@ import (
 var ntables int = 5
 var nwaiters int = 3
 
-// func startSim() {
-// 	item.Gentables(ntables)
-// 	item.Genwaiter(nwaiters)
+const simtime = 350
+
+func startSim() {
+	item.Gentables(ntables)
+	item.Genwaiters(nwaiters)
+	item.WaitersStartWork()
+	item.TablesStartOrder()
+}
+
+// func GenRandomOrder() {
+// 	for {
+// 		time.Sleep(4 * time.Second)
+// 		go RandomOrder()
+// 	}
 // }
 
-var order_list []item.Order
-var received_order []item.Order
+// func RandomOrder() {
+// 	n := rand.Intn(10)
+// 	if n <= 4 {
+// 		fmt.Println("Order Generated.")
+// 		item.Order_list = append(item.Order_list, item.Genorder(rand.Intn(9999-1000)+1000))
+// 	} else {
+// 		fmt.Println("Didn't generate any order.")
+// 	}
+// }
+
+var Received_order []item.Order
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+	startSim()
 
-	var n = 5
-
-	for i := 1; i <= n; i++ {
-		order_list = append(order_list, item.Genorder(i))
-	}
-
-	item.Genwaiter(3)
-
-	fmt.Println(order_list)
-	fmt.Println(item.Waiters)
-
-	//	startSim()
 	router := mux.NewRouter()
 
 	router.HandleFunc("/distribution", Orders).Methods("GET")
-	PostOrder()
+	//PostOrder()
 
-	log.Println("Listening...")
 	http.ListenAndServe(":8080", router)
 }
 
@@ -51,7 +61,7 @@ func Orders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(order_list)
+	json.NewEncoder(w).Encode(item.Order_list)
 }
 
 func PostOrder() {
