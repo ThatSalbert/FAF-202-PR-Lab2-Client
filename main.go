@@ -1,12 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"net/http"
-	"strings"
 	"time"
 
 	"dining_hall/item"
@@ -20,74 +19,65 @@ var nwaiters int = 3
 const simtime = 350
 
 func startSim() {
-	item.Gentables(ntables)
-	item.Genwaiters(nwaiters)
-	item.WaitersStartWork()
-	item.TablesStartOrder()
+	//item.Gentables(ntables)
+	//item.Genwaiters(nwaiters)
+	GenRandomOrder()
 }
 
-// func GenRandomOrder() {
-// 	for {
-// 		time.Sleep(4 * time.Second)
-// 		go RandomOrder()
-// 	}
-// }
+func GenRandomOrder() {
+	go RandomOrder()
+}
 
-// func RandomOrder() {
-// 	n := rand.Intn(10)
-// 	if n <= 4 {
-// 		fmt.Println("Order Generated.")
-// 		item.Order_list = append(item.Order_list, item.Genorder(rand.Intn(9999-1000)+1000))
-// 	} else {
-// 		fmt.Println("Didn't generate any order.")
-// 	}
-// }
-
-var Received_order []item.Order
+func RandomOrder() {
+	for {
+		n := rand.Intn(10)
+		if n <= 4 {
+			ordertobesent, err := json.Marshal(item.Genorder())
+			fmt.Println("Order Generated: " + string(ordertobesent))
+			response, err := http.Post("http://kitchen:8000/order", "application/json", bytes.NewBuffer(ordertobesent))
+			fmt.Println("Order sent to kitchen.")
+			if err != nil {
+				fmt.Print("Could not make POST request to the kitchen.")
+			}
+			defer response.Body.Close()
+			time.Sleep(time.Second * 2)
+		} else {
+			fmt.Println("Didn't generate any order.")
+			time.Sleep(time.Second * 2)
+		}
+	}
+}
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
-	startSim()
 
 	router := mux.NewRouter()
 
 	router.HandleFunc("/distribution", Orders).Methods("GET")
-	//PostOrder()
+	router.HandleFunc("/distribution", Posts).Methods("POST")
+
+	startSim()
 
 	http.ListenAndServe(":8080", router)
+}
+
+func Posts(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var order item.K_order_post
+	_ = json.NewDecoder(r.Body).Decode(&order)
+	item.ReceivedOrder = append(item.ReceivedOrder, order)
+	json.NewEncoder(w).Encode(&order)
+
+	ordertobesent, err := json.Marshal(order)
+	if err != nil {
+		fmt.Print("No order.")
+	}
+	fmt.Println("Dining Hall got the order: " + string(ordertobesent))
 }
 
 func Orders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(item.Order_list)
-}
-
-func PostOrder() {
-	const url = "http://kitchen:8000/order"
-
-	requestBody := strings.NewReader(`
-		{
-			"order_id": 6,
-			"table_id": 3,
-			"waiter_id": 3,
-			"items": [3, 4, 5],
-			"priority": 3,
-			"max_wait": 35,
-			"pick_up_time": 4829
-		}
-	`)
-
-	response, err := http.Post(url, "application/json", requestBody)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer response.Body.Close()
-
-	content, _ := ioutil.ReadAll(response.Body)
-
-	fmt.Println(string(content))
+	json.NewEncoder(w).Encode(item.ReceivedOrder)
 }

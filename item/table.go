@@ -1,11 +1,5 @@
 package item
 
-import (
-	"fmt"
-	"strconv"
-	"time"
-)
-
 type Table struct {
 	Id          int    `json:"id"`
 	State       int8   `json:"state"`
@@ -23,23 +17,5 @@ func Gentables(n int) {
 		newtable.State = 0
 		newtable.Table_order = nil
 		Tables = append(Tables, newtable)
-	}
-}
-
-func TablesStartOrder() {
-	for _, table := range Tables {
-		go table.HandleOrder()
-	}
-}
-
-func (table *Table) HandleOrder() {
-	for {
-		if table.State == 0 {
-			table.State = 1
-			table.Table_order = Genorder()
-			fmt.Println("Order generated for table " + strconv.Itoa(table.Id))
-			time.Sleep(2 * time.Second)
-			OrderChannel <- *table.Table_order
-		}
 	}
 }
