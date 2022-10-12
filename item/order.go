@@ -6,21 +6,21 @@ import (
 )
 
 type Order struct {
-	Id       int     `json:"id"`
-	Items    []int   `json:"items"`
-	Priority int     `json:"priority"`
-	Max_wait float32 `json:"max_wait"`
+	Restaurant_Id int     `json:"id"`
+	Items         []int   `json:"items"`
+	Priority      int     `json:"priority"`
+	Max_wait      float32 `json:"max_wait"`
+	Created_Time  int64   `json:"created_time"`
 }
 
-var Order_list []Order
-
 func Genorder() *Order {
-	var table_order Order
+	var client_order = new(Order)
 	rand.Seed(time.Now().UnixNano())
 	var nitems int = rand.Intn(6-1) + 1
-	table_order.Id = rand.Intn(9999-1000) + 1000
-	table_order.Items = Genlist(nitems)
-	table_order.Priority = rand.Intn(5-1) + 1
-	table_order.Max_wait = float32(Get_max_wait(table_order.Items)) * 1.3
-	return &table_order
+	client_order.Restaurant_Id = 1
+	client_order.Items = Genlist(nitems)
+	client_order.Priority = rand.Intn(5-1) + 1
+	client_order.Max_wait = float32(Get_max_wait(client_order.Items)) * 1.3
+	client_order.Created_Time = time.Now().Unix()
+	return client_order
 }

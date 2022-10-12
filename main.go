@@ -8,19 +8,12 @@ import (
 	"net/http"
 	"time"
 
-	"dining_hall/item"
+	"client/item"
 
 	"github.com/gorilla/mux"
 )
 
-var ntables int = 5
-var nwaiters int = 3
-
-const simtime = 350
-
 func startSim() {
-	//item.Gentables(ntables)
-	//item.Genwaiters(nwaiters)
 	GenRandomOrder()
 }
 
@@ -29,21 +22,22 @@ func GenRandomOrder() {
 }
 
 func RandomOrder() {
+	time.Sleep(time.Second * 10)
 	for {
 		n := rand.Intn(10)
 		if n <= 4 {
-			ordertobesent, err := json.Marshal(item.Genorder())
-			fmt.Println("Order Generated: " + string(ordertobesent))
-			response, err := http.Post("http://kitchen:8000/order", "application/json", bytes.NewBuffer(ordertobesent))
-			fmt.Println("Order sent to kitchen.")
+			ordertobesent, err := json.Marshal(item.GenClorderpost())
+			fmt.Println("Client Generated Order: " + string(ordertobesent))
+			response, err := http.Post("http://food-order:7000/order", "application/json", bytes.NewBuffer(ordertobesent))
+			fmt.Println("Order sent to Food Ordering Service.")
 			if err != nil {
-				fmt.Print("Could not make POST request to the kitchen.")
+				fmt.Print("Could not make POST request to the Food Ordering Service.")
 			}
 			defer response.Body.Close()
-			time.Sleep(time.Second * 2)
+			time.Sleep(time.Second * 4)
 		} else {
-			fmt.Println("Didn't generate any order.")
-			time.Sleep(time.Second * 2)
+			fmt.Println("Client didn't generate any order.")
+			time.Sleep(time.Second * 4)
 		}
 	}
 }
@@ -53,31 +47,31 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/distribution", Orders).Methods("GET")
-	router.HandleFunc("/distribution", Posts).Methods("POST")
+	//router.HandleFunc("/order", Orders).Methods("GET")
+	//router.HandleFunc("/order", Posts).Methods("POST")
 
 	startSim()
 
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":6000", router)
 }
 
-func Posts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var order item.K_order_post
-	_ = json.NewDecoder(r.Body).Decode(&order)
-	item.ReceivedOrder = append(item.ReceivedOrder, order)
-	json.NewEncoder(w).Encode(&order)
+// func Posts(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "application/json")
+// 	var order item.K_order_post
+// 	_ = json.NewDecoder(r.Body).Decode(&order)
+// 	item.ReceivedOrder = append(item.ReceivedOrder, order)
+// 	json.NewEncoder(w).Encode(&order)
 
-	ordertobesent, err := json.Marshal(order)
-	if err != nil {
-		fmt.Print("No order.")
-	}
-	fmt.Println("Dining Hall got the order: " + string(ordertobesent))
-}
+// 	ordertobesent, err := json.Marshal(order)
+// 	if err != nil {
+// 		fmt.Print("No order.")
+// 	}
+// 	fmt.Println("Food Ordering Service got the order: " + string(ordertobesent))
+// }
 
-func Orders(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+// func Orders(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "application/json")
+// 	w.WriteHeader(http.StatusOK)
 
-	json.NewEncoder(w).Encode(item.ReceivedOrder)
-}
+// 	json.NewEncoder(w).Encode(item.ReceivedOrder)
+// }

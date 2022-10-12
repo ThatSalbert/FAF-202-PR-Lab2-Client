@@ -1,14 +1,14 @@
 FROM golang:alpine
 
-RUN mkdir /dining_hall
+RUN mkdir /client
 
-WORKDIR /dining_hall
+WORKDIR /client
 
 COPY . .
 
 RUN go build -o /go/bin/main
 
-EXPOSE 8080
+EXPOSE 6000
 
 ENTRYPOINT ["/go/bin/main"]
 

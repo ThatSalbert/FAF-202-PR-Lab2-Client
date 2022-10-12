@@ -12,9 +12,9 @@ type Food struct {
 	Cooking_apparatus string `json:"cooking_apparatus"`
 }
 
-var pizza = Food{Id: 1, Name: "pizza", Preparation_time: 20, Complexity: 2, Cooking_apparatus: "oven"}
-var salad = Food{Id: 2, Name: "salad", Preparation_time: 10, Complexity: 1, Cooking_apparatus: ""}
-var zeama = Food{Id: 3, Name: "zeama", Preparation_time: 7, Complexity: 1, Cooking_apparatus: "stove"}
+var pizza = Food{Id: 1, Name: "Pizza", Preparation_time: 20, Complexity: 2, Cooking_apparatus: "oven"}
+var salad = Food{Id: 2, Name: "Salad", Preparation_time: 10, Complexity: 1, Cooking_apparatus: ""}
+var zeama = Food{Id: 3, Name: "Zeama", Preparation_time: 7, Complexity: 1, Cooking_apparatus: "stove"}
 var scallop = Food{Id: 4, Name: "Scallop Sashimi with Meyer Lemon Confit", Preparation_time: 32, Complexity: 3, Cooking_apparatus: ""}
 var island_duck = Food{Id: 5, Name: "Island Duck with Mulberry Mustard", Preparation_time: 35, Complexity: 3, Cooking_apparatus: "oven"}
 var waffles = Food{Id: 6, Name: "Waffles", Preparation_time: 10, Complexity: 1, Cooking_apparatus: "stove"}

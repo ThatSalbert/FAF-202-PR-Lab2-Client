@@ -1,4 +1,4 @@
-module dining_hall
+module client
 
 go 1.19
 
